@@ -1,8 +1,10 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(config.h.in)
-AM_INIT_AUTOMAKE(espresso-ab, 1.0)
-AM_CONFIG_HEADER(config.h)
+AC_INIT([UC Berkeley Logic Optimization Espresso (1988)],
+	    [1.2], [delp.gary@mayo.edu], [espresso88])
+
+AM_INIT_AUTOMAKE([-Wall foreign std-options])autoconf
+AM_CONFIG_HEADER([config.h])
 
 dnl Checks for programs.
 AC_PROG_CC
@@ -21,5 +23,7 @@ dnl Checks for library functions.
 AC_FUNC_MEMCMP
 AC_CHECK_FUNCS(strcspn strerror strspn strstr)
 
-AC_OUTPUT([Makefile
+AC_CONFIG_FILES([
+	Makefile
 	src/Makefile])
+AC_OUTPUT

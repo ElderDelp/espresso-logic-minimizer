@@ -1,0 +1,244 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="content-type">
+  <title>quick start</title>
+</head>
+<body>
+<p class="MsoTitle">ESPRESSO &#8211; A QUICK REFERENCE</p>
+<p class="MsoNormal" style="text-align: center;" align="center"><b
+ style=""><u><span style="font-size: 14pt;"><o:p><span
+ style="text-decoration: none;"><br>
+</span></o:p></span></u></b></p>
+<p class="MsoBodyText" style="line-height: 150%;">The purpose of this
+document is
+to give a quick introduction to ESPRESSO to use it for logic
+minimization. This
+document is not meant to be taken as a complete reference. More
+detailed
+documents will be put up on the course web page. These documents
+explain the
+input format as well as all the available options in detail. Interested
+students are strongly encouraged to refer to these documents.</p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;"><o:p>&nbsp;</o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;">What is
+ESPRESSO?<o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;">ESPRESSO is
+a 2-level minimization tool, comes as a part of the SIS package and is
+available as open source at UC Berkeley CAD page. Espresso takes as
+input a
+two-level representation of a two-valued (or multiple-valued) Boolean
+function,
+and produces a minimal equivalent representation.<o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;">Espresso
+reads the file provided (or standard input if no files are specified),
+performs
+the minimization, and writes the minimized result to standard output.<span
+ style="">&nbsp; </span>Espresso automatically verifies that the
+minimized function is equivalent to the original function. Options
+allow for
+using an exact minimization algorithm, for choosing an optimal phase
+assignment
+for the output functions, and for choosing an optimal assignment of the
+inputs
+to input decoders.<o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;"><o:p>&nbsp;</o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;">How does
+one specify the input file?<o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;">Espresso
+accepts as input a two-level description of a Boolean function. The
+input file
+is described as a PLA. Comments are allowed within the input by placing
+a pound
+sign<span style="">&nbsp; </span>(#) as the first character on a
+line. Comments and unrecognized keywords are passed directly from the
+input
+file to standard output. Any white-space(blanks, tabs, etc.), except
+when used
+as a delimiter in an embedded command, is ignored.<span style="">&nbsp;
+</span>It is generally assumed that the PLA is
+specified such that each row of the PLA fits on a single line in the
+input
+file. The easiest way to understand the format is through an example.<o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;">Consider a
+single bit adder that has three inputs: a, b and cin. It produces 2
+outputs z
+and cout. The espresso pla file looks like this:<o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;"><o:p>&nbsp;</o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;"><o:p>&nbsp;</o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;"># This is a
+comment line<o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;"># PLA file
+for a full-adder<o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;"># There are
+three inputs and 2 outputs<o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;">.i 3<o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;">.o 2<o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;"># Now, we
+describe the function. The first 3 columns describe the inputs,
+followed by <o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;"># blank
+spaces. Then the 2 outputs z and cout are given<o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;">000<span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>00<o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;">001<span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>10<o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;">010<span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>10<o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;">011<span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>01<o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;">100<span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>10<o:p></o:p></span></p>
+<p class="MsoNormal"
+ style="margin-left: 0.5in; text-align: justify; text-indent: -0.5in; line-height: 150%;"><!--[if !supportLists]--><span
+ style="font-size: 12pt; line-height: 150%;"><span style="">101<span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-size-adjust: none; font-stretch: normal;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><!--[endif]--><span
+ style="font-size: 12pt; line-height: 150%;">01<o:p></o:p></span></p>
+<p class="MsoNormal"
+ style="margin-left: 0.5in; text-align: justify; text-indent: -0.5in; line-height: 150%;"><!--[if !supportLists]--><span
+ style="font-size: 12pt; line-height: 150%;"><span style="">110<span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-size-adjust: none; font-stretch: normal;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><!--[endif]--><span
+ style="font-size: 12pt; line-height: 150%;">01<o:p></o:p></span></p>
+<p class="MsoNormal"
+ style="margin-left: 0.5in; text-align: justify; text-indent: -0.5in; line-height: 150%;"><!--[if !supportLists]--><span
+ style="font-size: 12pt; line-height: 150%;"><span style="">111<span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-size-adjust: none; font-stretch: normal;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><!--[endif]--><span
+ style="font-size: 12pt; line-height: 150%;">11<o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;">.e<o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;"><o:p>&nbsp;</o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;">A don&#8217;t
+care at the output is specified as a &#8216;-&#8216;. A detailed explanation of all
+key
+words can be found in the references on the course web page.<o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;"><o:p>&nbsp;</o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;">How do I
+run Espresso on my machine in ICAEN?<o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;">Login
+to login-pa.engineering.uiowa.edu</p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;">For running
+Espresso do the following at your login prompt:<o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;">1) setenv
+OCTTOOLS /usr/local/opt/octtools5.2<o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;"><span style="">&nbsp;&nbsp;
+</span><span style="">&nbsp;</span>set
+path=($path $OCTTOOLS/bin)<o:p></o:p></span></p>
+<p class="MsoNormal"
+ style="margin-left: 0.25in; text-align: justify; text-indent: -0.25in; line-height: 150%;"><!--[if !supportLists]--><span
+ style="font-size: 12pt; line-height: 150%;"><span style="">2)<span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-size-adjust: none; font-stretch: normal;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><!--[endif]--><span
+ style="font-size: 12pt; line-height: 150%;">Then espresso -h will list
+the commands if
+everything<span style="">&nbsp; </span>is okay<o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;">You can
+start running espresso with: espresso [options] [filename].<o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;"><o:p>&nbsp;</o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;">What are
+the available options in Espresso?<o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;">The
+standard package is available with several options. Here, we list a few
+commonly used options<o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;">Heuristic
+mode:<o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;">The default
+option in Espresso and so requires no options specification. Uses
+standard
+espresso heuristics<o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;">Exact mode:<o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;">Does an
+exact 2-level minimization. Use &#8211;Dexact. Run-time for exact
+minimization of a
+logic function is exponential in the size of the input. Hence, if you
+use this
+option, it is quite possible that the program runs forever for large
+files.<o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;">-s:<o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;">Gives the
+statistics after running espresso like run-time, literal count etc.<o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;">-t:<o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;">Will show a
+trace of the execution of the program.<o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;">Now, for
+example if you are given a PLA file describing a single bit adder
+called
+adder.pla and you are asked to minimize the file using exact
+minimization and
+report the literal count and run-times, you may type the following
+command: <o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;">&#8220;espresso
+&#8211;Dexact &#8211;s adder.pla&#8221;<o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;"><o:p>&nbsp;</o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;">That
+explains espresso in brief. Please feel free to contact me in case you
+have any
+doubts or have problems in setting espresso up.<o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;">Original documentation:
+Ganesh
+Venkataraman<o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;"><o:p>&nbsp;</o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;"><o:p>&nbsp;</o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;"><o:p>&nbsp;</o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;"><o:p>&nbsp;</o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;"><o:p>&nbsp;</o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;"><o:p>&nbsp;</o:p></span></p>
+<p class="MsoNormal" style="text-align: justify; line-height: 150%;"><span
+ style="font-size: 12pt; line-height: 150%;"><o:p>&nbsp;</o:p></span></p>
+</body>
+</html>

@@ -1,0 +1,638 @@
+______________________________________________________________________
+______________________________________________________________________
+
+1/28/16		CSEE E6861y: CAD for Digital Systems	Handout #9a
+
+______________________________________________________________________
+______________________________________________________________________
+
+HW #1, PROBLEM #1: INTRODUCTION TO ESPRESSO and ESPRESSO-EXACT.
+______________________________________________________________________
+______________________________________________________________________
+
+This file gives an introduction to use of the CAD tools, "espresso"
+and "espresso-exact", in the Berkeley SIS package.  It also gives 
+details on HW#1 problem #1.
+
+This assignment is designed to get you familiar with using CAD tools
+for 2-level logic minimization (both heuristic and exact).  You will 
+also gain some intuition as to the complexity of the problems 
+that can be solved, and the pluses/minuses of the different algorithms.
+But the main point of this assignment is just to get you started
+with the CAD package itself.
+
+THE ASSIGNMENT SHOULD NOT TAKE MUCH WORK!  You are basically learning
+how to run the package.  You will simply apply 4 logic minimization tools 
+to 12 different large benchmark combinational examples and collect results.  
+You will then analyze and interpret the results, and hand in a short summary. 
+
+It should take you 4-6 hours maximum to learn the tools and run them
+on these examples, after you have downloaded the CAD tool.  It will
+then take several more hours to put your results in a table, perform
+some initial analysis, and write it up.
+
+______________________________________________________________________
+______________________________________________________________________
+
+		      THE ESPRESSO TOOL
+
+You will be using the CAD tool, "espresso", in the Berkeley SIS package.  
+Actually, the espresso program is a SET OF TOOLS; you can invoke different 
+operation by giving the program different "switches" (described below).
+
+You will be running the espresso program to invoke 4 separate 
+two-level logic minimization algorithms.
+
+	1.  espresso-exact ("mincov"):		exact solution
+
+	2.  espresso-exact, single-output:  	exact solution 
+
+	3.  espresso:				heuristic solution
+
+	4.  espresso, fast mode			heuristic solution 
+
+Algorithms #1, #3, and #4 all target 'multi-output minimization',
+where products (AND gates) can be shared among multiple
+output functions.  
+
+Algorithm #2 targets 'single-output minimization', where each 
+individual output function is separately optimized, and there 
+is no sharing of  products (AND gates) between
+individual output functions.
+
+Each of the heuristic algorithms has a "primary cost," i.e. target, 
+of minimizing the number of products (i.e. cubes, implicants).  As a 
+"secondary cost," i.e. once the # of products is minimized, each 
+heuristic algorithm also tries to minimize the number of gate 
+inputs to the AND and OR gates (i.e. # of literals).
+
+______________________________________________________________________
+
+ACCESSING SIS:
+
+See the SIS web page in the class directory.
+
+You have three options:  (i) download SIS package for Linux; 
+(ii) download SIS package for PC's; (iii) run SIS on Acis machines.
+
+______________________________________________________________________
+
+ALGORITHM #1:  ESPRESSO-EXACT (multi-output mode).  
+
+This algorithm is a more modern and improved version of the Quine-McCluskey 
+version presented in class.  It is also described in Rudell's PhD thesis, 
+chapter 2. 
+
+It is *NOT* 'espresso' (which is heuristic only)!  However, for convenience,
+the name 'espresso-exact' is used in the tool.  It is more commonly known
+in the research literature as "MINCOV" (minimum-covering).
+
+You do not need to know all the details of this algorithm, just
+to understand that it (i) generates all primes; (ii) produces a prime
+implicant table; (iii) reduces the table, by identifying essentials
+and performing row and column dominance; and (iv) uses a sophisticated
+"branch-and-bound" method to solve any remaining "cyclic core".
+
+To call espresso-exact (after setting up your paths, discussed below), 
+type the command:
+
+		espresso -Dexact -t
+
+The optional -t switch means "trace mode"; it outputs many useful 
+statistics on the run including runtime breakdown of steps, and
+cost of the final "cover" (AND-OR implementation) produced.  
+
+______________________________________________________________________
+
+ALGORITHM #2:  ESPRESSO-EXACT (single-output mode). 
+
+ The same as #1 above, but now the algorithm is run multiple times, once 
+for each individual output function.  Effectively, if the function has 
+m inputs and n outputs, the algorithm treats it as n *distinct functions*, 
+each with one output, and runs the algorithm in turn for each of these 
+m functions, which have m inputs and 1 output.  No multi-output primes 
+are generated, and no sharing of products across functions is allowed.  
+
+To call espresso-exact in single-output mode, type the command:
+ 
+		espresso -Dso -S1 -t
+
+______________________________________________________________________
+
+ALGORITHM #3:  ESPRESSO.  
+
+This is the heuristic minimization algorithm which is being presented 
+in class.
+
+The algorithm begins with any initial "seed" cover, i.e.
+a legal (but potentially sub-optimal) sum-of-products implementation 
+listed in PLA format (see below).  It then performs an
+(i) EXPAND operation, followed by (ii) IRREDUNDANT operation. 
+It then has an inner loop which repeats 3 operations until 
+there is no change:  REDUCE; EXPAND; IRREDUNDANT.  
+This inner loop is used to improve the quality of the solution.
+
+To call espresso, type the command:
+
+		espresso -t
+
+Note that in trace mode, you also can see how many iterations of
+the espresso loop were executed.
+
+______________________________________________________________________
+
+ALGORITHM #4: ESPRESSO, FAST MODE.  
+
+This heuristic algorithm is a simple modification of Algorithm #3, to 
+have faster runtime.  However, the quality of results may be worse.
+
+ESPRESSO-FAST MODE, also begins with an initial (i) EXPAND operation, 
+followed by (ii) IRREDUNDANT.  However, at this point, the algorithm 
+*terminates* and returns the result.  THERE IS NO INNER LOOP!  To call 
+espresso, fast mode, type the command:
+
+		espresso -efast -t
+
+______________________________________________________________________
+
+ESPRESSO HELP OPTION:
+
+If you are interested, you can see a list of other espresso options
+by typing the help command:	
+
+		espresso -h
+
+In addition, on the "Getting Started with SIS 1.3" web page, in the 
+class directory, there is a link to a detailed and very useful manual
+page; click on:
+
+		"Espresso Man Page"
+
+______________________________________________________________________
+
+OPTIMIZATION MODES:
+
+	a) OUTPUT PHASE OPTIMIZATION:  
+
+	   	See the "Espresso Man Page" (listed above).  
+		This optimization uses the
+		command switch -Dopo.  It attempts to *complement*
+		different combinations of the outputs, and implement
+		some outputs complemented and others non-complemented.
+		The SOP implementations for the complemented outputs
+		then get added inverters.  In some cases, it is
+		much simpler to implement the complement f' of 
+		a function f.  Hence, this optimization considers
+		the inversion of different combinations of the outputs
+		and picks the best pattern of complemented and 
+		non-complemented outputs.
+
+		For example, to run Algorithm #3, espresso, in 
+		this optimization  mode, you would type:
+
+			espresso -t -Dopo <filename>
+
+
+	b) USE 2-to-4 DECODERS ON SOME INPUTS:  
+
+	        See the "Espresso Man Page" (listed above).  This 
+		optimization uses the command switch -Dpair.  
+
+		NOTE:  unlike optimization a),
+		this optimization should be applied *after*
+		you have already minimized the function (with one
+		of the above 4 algorithms); the optimization is 
+		applied on the resulting minimized PLA file, and
+		attempts to do further minimization.
+
+		This optimization heuristically looks for pairs
+		of inputs, for example A and C, feeds this pair
+		through a 2-to-4 decoder, and then takes the 
+		decoded *4-BIT OUTPUT* of the decoder, e.g. Z0, Z1,
+		Z2, and Z3, and modifies the original function 
+		to replace the pair of original inputs with the
+		4-bit decoder output.
+
+		Various other input pairs are also identified for
+		decoding.
+
+		The idea is that sometimes, decoders can be added
+		to inputs, thus implementing a "predecoding" step".  
+		The larger number of resulting decoder outputs is then
+		used as input to a NEW FUNCTION (i.e. a function
+		block which takes inputs *after* the initial decoding).
+		In a number of cases, even after counting the cost
+		of the extra input decoders, the resulting function
+		block may have a lower cost implementation.
+
+		For example, to run Algorithm #3, espresso, in 
+		this optimization  mode, you would type:
+
+			espresso -t -Dpair <filename>
+		
+______________________________________________________________________
+______________________________________________________________________
+
+			PLA FILE FORMAT
+
+   (also known as "CUBICAL REPRESENTATION" or "CUBICAL COMPLEX")
+			
+Both the input file and output file of the espresso tools are a multi-output
+function, in "PLA format" (also called "cubical representation"), as 
+discussed in class.  See also the SIS home page, which includes links
+on PLA format.
+
+A PLA file has a header, body and footer (the footer is sometimes 
+optional).  The body describes products or implicants.
+
+--------------
+PLA Input File
+--------------
+
+A PLA input file for a multi-output function typically describes 2 SETS:
+the (i) ON-set ("F") and (ii) DC-set ("D").  
+
+This "FD mode" is the DEFAULT MODE for espresso.  Any minterm which is 
+not specified in the ON-set or DC-set is implicitly assumed to belong 
+to the OFF-set ("R").
+
+(Be careful: there are slightly different meanings to the 1/0/- of outputs
+in other modes such as FR.  We're not dealing with those modes now.)
+
+A "1" in an output field describes an ON-set cube,
+and a "-" in an output field describes an DC-set cube.
+
+IMPORTANT:  Remember that a "0" in an output field 
+simply means that the cube "does not contribute" to 
+that output; it DOES *NOT* INDICATE AN OFF-SET MINTERM!
+
+NOTE: In old notation, the "-" is sometimes indicated by "2".
+
+For example, consider a following truth table for a function
+with 3 inputs (a,b,c) and 2 outputs (f1 f2):
+
+		a  b  c  |  f1 f2
+	      ----------------------
+		0  0  0  |  1  0 
+		0  0  1  |  1  1 
+		0  1  0  |  0  0 
+		0  1  1  |  0  0 
+		1  0  0  |  0  - 
+		1  0  1  |  1  1 
+		1  1  0  |  1  1 
+		1  1  1  |  1  0 
+
+A PLA input file for this function is the following:
+
+---------
+test1.pla
+---------
+
+.i 3
+.o 2
+.ilb a b c
+.ob f1 f2
+.p 6
+00- 10
+-01 11
+1-1 10
+11- 10
+110 11
+100 0-
+.e
+
+Field ".i" indicates number of inputs, ".o" indicates number of 
+outputs, and ".p" indicates number of cubes (products) listed.  
+Note that some of the header fields are *optional*, including 
+".ilb" (names of inputs) and ".ob" (names of outputs).  
+
+---------------
+PLA Output File
+---------------
+
+A PLA output file for a multi-output function is used to describe
+a COVER of the function, i.e. the sum-of-products solution, or LIST
+OF CUBES.  The format is similar to a PLA input file, but the meaning 
+is different.  A cover simply consists of a list of prime implicants.  If 
+an implicant contributes to an output, there is a "1" in the output field.  
+If the implicant does not contribute to the output, the output field 
+has a "0".  
+
+Inherently, a cover -- which represents an implementation -- 
+has *no DC's* in the output part.  Each cube listed either contributes
+or does not contribute to particular outputs, and the PLA output file
+simply enumerates which cubes are selected, and to which outputs
+they contribute. 
+
+To generate a PLA output file for this "test1.pla" example,
+you can run espresso-exact (Algorithm #1) on the input file.
+To do this, first copy test1.pla to your own directly, then type:
+
+	espresso -Dexact test1.pla > test1.sol
+
+For simplicity, the "-t" trace option is omitted.
+You can run with the option as well:
+
+	espresso -Dexact -t test1.pla > test1.sol
+
+______________________________________________________________________
+______________________________________________________________________
+
+			HOMEWORK #1, PROBLEM #1  
+
+
+SET-UP:
+
+You will be running the tools on examples from the SIS benchmark
+suite.  These examples are accessible by following directions
+on the SIS page.  They are downloadable as a tar file, or as
+individual pla files.
+
+These benchmark examples are also discussed in detail in Rudell's thesis,
+at the end of chapter 2, which you are being given as Handout #8.
+
+You will be looking at benchmark examples in three subdirectories
+of the "ex" directory:  "indust", "math" and "random".  
+
+Rudell classifies the examples from "indust" and "math"
+into 5 categories (Table 2.2, p. 35):
+
+		trivial
+		noncyclic
+		cyclic-solved ("cyclic-s")
+		cyclic-unsolved ("cyclic-us")
+		too many primes ("primes")
+
+You will use the following 12 examples from subdirectories 
+"indust", "math" and "random", and from the class web page; 
+their classifications are also listed:
+
+	"indust":
+
+		prom1 (non-cyclic)
+		bcc (cyclic-s)
+
+		lin.rom (cyclic-s)
+		x6dn (cyclic-s)
+
+		max1024 (cyclic-us)
+		cps (cyclic-s)
+
+		spla  (cyclic-s)
+		x7dn (primes)
+
+		jbp (primes)
+
+	"math":  
+
+		add6 (noncyclic)
+		tial (cyclic-s)
+
+	"random":  
+		
+		test1
+
+
+Note that 3 problems (x7dn, jbp, max1024) are classified as "unsolvable" 
+in Rudell's table, using exact minimization.   In addition, 1 more example
+is not listed in Rudell's table (test1).   
+In principle, you should not be able to synthesize an 'unsolvable'
+examplle using espresso-exact (Algorithm #1).
+
+HOWEVER:  you should still still try running these benchmarks
+for Algorithm #1, WITH A TIMEOUT OF 5 MINUTES.  In some cases, you may
+find that earlier metrics for 'unsolvable' (from 1980's) may no
+longer apply for modern machines! 
+
+You can also find all of them in Rudell's PhD Thesis, pp. 38-40
+(except the random "test1" benchmark).    
+This table lists relevant information on the examples, as well 
+as the results of runs using espresso-exact:  
+
+	# inputs/outputs, 
+	# initial product terms (in the *initial* unoptimized cover,
+		i.e. the given PLA file in the examples subdirectory), 
+	# primes implicants, 
+	# essential prime implicants, 
+	# products (i.e. primes) in the exact minimum-cost solution.   
+
+Also, take a look at the actual .pla files for these examples,
+before running them.  You should also read the relevant discussion 
+in Rudell, pp. 31-36.  
+
+______________________________________________________________________
+
+DO THE FOLLOWING:
+
+COPY the above 12 example pla files into your own directory.  
+Also, be sure you have access to the espresso program.  (See above.)
+
+    ==================================================================  
+
+    A.  RUNS.  For each of the 12 examples, run the 4 algorithms
+	described above.  Redirect the output into a file for each run.  
+	The result will be 48 PLA output files, each describing a cover 
+	for one of the examples using one of the algorithms.
+
+	NOTE:  for the 3 unsolved benchmarks, and the 1 benchmark
+	with unknown results (test1), see above.  You may or may not be 
+	able to complete a run under 'espresso-exact'.  You still should
+	do these runs, in verbose mode, with a TIMEOUT OF 5 MINUTES
+	(as indicated above), to see where the algorithm gets stuck,
+	or whether you can solve them.
+
+	EXAMPLE:  If the PLA file bcc is in your current 
+	directory, and you want to run Algorithm #1, espresso-exact, 
+	type:
+		espresso -Dexact -t bcc > bcc.sol1
+
+	where sol1 indicates solution using Algorithm #1.  
+
+		==> DO **NOT** HAND IN THESE FILES.
+
+    ==================================================================  
+
+    B.  RESULTS TABLE.  Using the header information in each 
+    	of the 48 solution (.sol) files, set up the following table
+	(again, the 3 'unsolved' benchmarks, you won't be able
+	to complete an 'espresso-exact' run).
+
+
+	1. FOR EACH OF THE 12 EXAMPLES, LIST:
+
+		(a)  # INPUTS/# OUTPUTS
+
+		(b) TOTAL # OF PRIMES* 
+
+		(c) TOTAL # OF ESSENTIAL PRIMES* 
+
+	NOTE:  The (a), (b) and (c) values are also listed
+	Rudell's table (pp. 38-40).  
+
+	*NOTE:  for Algorithm #2, which is the only algorithm
+	you run which uses single-output minimization, there
+	will be separate primes and essential primes for each 
+	individual output function, and so the count will grow 
+	very large.  Therefore, for (b) and (c), only write
+	the single result for multi-output minimization, as 
+	listed in Rudell's table.
+
+	Also, the random benchmark "test1" is not included in Rudell.
+	You will have to obtain these #'s from the 'espresso-exact'
+	output file.
+
+
+		(d)  I+O = TOTAL I/O 
+		      The 'total I/O' = # INPUTS + OUTPUTS:  add these 
+		      two numbers, and enter the single resulting sum 
+		      in a  separate column.  This number is one metric 
+  		      of the 'size' of the function.
+
+		(e)  E/P RATIO: 
+		      The E/P ratio =  total # essentials/total # primes,
+		      i.e. (c)/(b).  This ratio is one metric of how
+		      much the minimization problem reduces to the
+		      problem of finding the function's essential
+		      primes.
+
+		(f)  E/C RATIO:
+		      The E/C ratio =  
+		           total # essentials/# products in exact solution
+		      Here, the # products in exact solution is the result
+		      of running Algorithm #1 on each benchmark.
+		      The total # of essentials is given by (c).
+		      This ratio is another metric of how
+		      much the minimization problem reduces to the
+		      problem of finding the function's essential
+		      primes.
+
+
+	2. FOR *EACH* OF THE 4 RUNS ON EACH EXAMPLE, LIST:
+
+		(a) TOTAL RUNTIME
+		    See the output of the run, as follows:
+			Alg. #1/#2:    "exact     Time was [XXX] sec..."
+			Alg. #3/#4:    "ESPRESSO  Time was [XXX] sec..."
+
+		(b) RUNTIME RATIO
+		    For Algorithms #2/3/4, indicate the ratio of
+		    its runtime to that of Algorithm #1.
+		    For example, for each benchmark, for Algorithm #2
+		    	the ratio would be: 
+		    	runtime(algorithm #2)/runtime(algorithm #1).
+
+		(c) COVER SIZE (= quality of solution)
+		    The cover size is the # of products in the 
+		    final solution.  See the same line of output as (a):
+		      "... Time was XXX sec, cost is c=X(Y)"; 
+		       Here, 'X' is the answer you want =
+			  # of products (cubes); it is also
+			  indicated by the ".p" field
+			  at top of the resulting pla solution file.
+
+		(d) COVER SIZE RATIO
+		    For Algorithms #2/3/4, indicate the ratio of
+		    its cover size to that of Algorithm #1.
+		    
+		    For example, for each benchmark, for Algorithm #2
+		    	the ratio would be: 
+		    	cover-size(algorithm #2)/cover-size(algorithm #1)
+
+		==> HAND IN THIS TABLE.
+
+    ==================================================================  
+
+     C. ANALYSIS OF RESULTS
+
+     	In this part, you are to evaluate several parameters of each
+	benchmark, and propose any correlation (or lack thereof)
+	between the runtime improvements and quality of results of 
+	algorithms #2-4, and these parameters.
+
+	WHAT TO DO:  
+
+	FOR EACH QUESTION BELOW, clearly analyze the results, highlighting and 
+	justifying any trends (or lack of trend), indicating any anomalies, 
+	and providing any explanation of the observed patterns of behavior.  
+
+	==> Be sure to discuss results for several individual benchmarks,
+	    to justify your arguments.
+
+	GRADING NOTE:  Your writeup will be graded on how thoroughly and
+	insightfully you cover the different comparisons.
+	(A quick cursory evaluation will have points deducted.)
+
+	FACTORS TO CONSIDER:
+		     - total # of primes  
+		     - total # of essentials
+		     - total I/O
+		     - E/P ratio
+		     - E/C ratio
+		       ... anything else of interest
+
+	(a) ALGORITHM #1 vs. ALGORITHM #2:   EXACT METHOD COMPARISON
+
+	Compare RUNTIME and COVER SIZE results for the benchmarks,
+	and explain the differences observed.
+	(3-4 SENTENCES)
+
+	(b) ALGORITHM #1 vs. ALGORITHM #3:  EXACT vs. HEURISTIC COMPARISON
+
+	Consider all of the above "FACTORS".  Highlight any 
+	interesting cases, where the two algorithms have similar
+	results, where they diverge significantly.
+	Conclude with any trends, or partial trends, or lack of
+	trends, as well as hypotheses on observed behavior.
+	Also, draw any overall conclusions about the tradeoffs of 
+	espresso vs. espresso-exact.
+	(6-8 SENTENCES)
+
+	(c) ALGORITHM #3 vs. ALGORITHM #4:  HEURISTIC ALTERNATIVES COMPARISON
+
+	Do similar analysis to (b), again, but now comparing the
+	baseline heuristic algorithm, espresso (#3), with the fast version (#4).
+	Draw any overall conclusions about the tradeoffs of espresso vs. 
+	espresso fast mode.
+	(6-8 SENTENCES)
+	
+	==> HAND IN THIS WRITTEN ANALYSIS. 
+
+
+    ==================================================================  
+	
+     D.  OPTIMIZATION EXPERIMENTS
+
+	Try out the two optimizations listed above, -Dopo and -Dpair, 
+ 	on 2 examples:  
+	
+		tial (math)
+		add6 (math)
+
+	For each of the two benchmark examples, do the following:  
+
+		 (a) OUTPUT PHASE OPTIMIZATION:
+		     Re-run espresso (Algorithm #3) on the original given
+			PLA file with the '-Dopo' option
+			(see "Optimization Modes" (a) above).
+
+			NOTE:  the selected phase assignment for the outputs
+			is given by the line: "#.phase...".
+
+		 (b) USING 2-to-4 INPUT DECODERS: 
+		    first, run espresso (Algorithm #3) on the original given
+		     PLA file and save it: 
+		     	 e.g. espresso -t tial > tial.sol.
+		     Then run espresso in -Dpair mode *on this
+		     already-minimized initial solution*:
+		     	 e.g. espresso -t -Dpair tial.sol.
+		     (see "Optimization Modes" (b) above;
+		       the man page indicates that -Dpair should
+		       be applied after initial minimization).
+			 
+
+	Report these two results, for these 2 examples.
+	Briefly indicate any trends you see, as to quality of
+	improvements.
+	
+______________________________________________________________________
+______________________________________________________________________
