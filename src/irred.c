@@ -230,7 +230,7 @@ tautology(pset *T)
 
 bool
 taut_special_cases(pset *T)
-         			/* will be disposed if answer is determined */
+/* will be disposed if answer is determined */
 {
     register pcube *T1, *Tsave, p, ceil=cube.temp[0], temp=cube.temp[1];
     pcube *A, *B;
@@ -238,21 +238,21 @@ taut_special_cases(pset *T)
 
     /* Check for a row of all 1's which implies tautology */
     for(T1 = T+2; (p = *T1++) != NULL; ) {
-	if (full_row(p, T[0])) {
-	    free_cubelist(T);
-	    return TRUE;
-	}
+		if (full_row(p, T[0])) {
+			free_cubelist(T);
+			return TRUE;
+		}
     }
 
     /* Check for a column of all 0's which implies no tautology */
-start:
+  start:
     INLINEset_copy(ceil, T[0]);
     for(T1 = T+2; (p = *T1++) != NULL; ) {
-	INLINEset_or(ceil, ceil, p);
+		INLINEset_or(ceil, ceil, p);
     }
     if (! setp_equal(ceil, cube.fullset)) {
-	free_cubelist(T);
-	return FALSE;
+		free_cubelist(T);
+		return FALSE;
     }
 
     /* Collect column counts, determine unate variables, etc. */
@@ -260,52 +260,52 @@ start:
 
     /* If function is unate (and no row of all 1's), then no tautology */
     if (cdata.vars_unate == cdata.vars_active) {
-	free_cubelist(T);
-	return FALSE;
+		free_cubelist(T);
+		return FALSE;
 
-    /* If active in a single variable (and no column of 0's) then tautology */
+		/* If active in a single variable (and no column of 0's) then tautology */
     } else if (cdata.vars_active == 1) {
-	free_cubelist(T);
-	return TRUE;
-
-    /* Check for unate variables, and reduce cover if there are any */
-    } else if (cdata.vars_unate != 0) {
-	/* Form a cube "ceil" with full variables in the unate variables */
-	(void) set_copy(ceil, cube.emptyset);
-	for(var = 0; var < cube.num_vars; var++) {
-	    if (cdata.is_unate[var]) {
-		INLINEset_or(ceil, ceil, cube.var_mask[var]);
-	    }
-	}
-
-	/* Save only those cubes that are "full" in all unate variables */
-	for(Tsave = T1 = T+2; (p = *T1++) != 0; ) {
-	    if (setp_implies(ceil, set_or(temp, p, T[0]))) {
-		*Tsave++ = p;
-	    }
-	}
-	*Tsave++ = NULL;
-	T[1] = (pcube) Tsave;
-
-	if (debug & TAUT) {
-	    printf("UNATE_REDUCTION: %d unate variables, reduced to %d\n",
-		cdata.vars_unate, CUBELISTSIZE(T));
-	}
-	goto start;
-
-    /* Check for component reduction */
-    } else if (cdata.var_zeros[cdata.best] < CUBELISTSIZE(T) / 2) {
-	if (cubelist_partition(T, &A, &B, debug & TAUT) == 0) {
-	    return MAYBE;
-	} else {
-	    free_cubelist(T);
-	    if (tautology(A)) {
-		free_cubelist(B);
+		free_cubelist(T);
 		return TRUE;
-	    } else {
-		return tautology(B);
-	    }
-	}
+
+		/* Check for unate variables, and reduce cover if there are any */
+    } else if (cdata.vars_unate != 0) {
+		/* Form a cube "ceil" with full variables in the unate variables */
+		(void) set_copy(ceil, cube.emptyset);
+		for(var = 0; var < cube.num_vars; var++) {
+			if (cdata.is_unate[var]) {
+				INLINEset_or(ceil, ceil, cube.var_mask[var]);
+			}
+		}
+
+		/* Save only those cubes that are "full" in all unate variables */
+		for(Tsave = T1 = T+2; (p = *T1++) != 0; ) {
+			if (setp_implies(ceil, set_or(temp, p, T[0]))) {
+				*Tsave++ = p;
+			}
+		}
+		*Tsave++ = NULL;
+		T[1] = (pcube) Tsave;
+
+		if (debug & TAUT) {
+			printf("UNATE_REDUCTION: %d unate variables, reduced to %d\n",
+				cdata.vars_unate, CUBELISTSIZE(T));
+		}
+		goto start;
+
+		/* Check for component reduction */
+    } else if (cdata.var_zeros[cdata.best] < CUBELISTSIZE(T) / 2) {
+		if (cubelist_partition(T, &A, &B, debug & TAUT) == 0) {
+			return MAYBE;
+		} else {
+			free_cubelist(T);
+			if (tautology(A)) {
+				free_cubelist(B);
+				return TRUE;
+			} else {
+				return tautology(B);
+			}
+		}
     }
 
     /* We tried as hard as we could, but must recurse from here on */
@@ -324,7 +324,7 @@ fcube_is_covered(pset *T, pset c, sm_matrix *table)
 static void
 ftautology(pset *T, sm_matrix *table)
                   	/* T will be disposed of */
-                 
+
 {
     register pcube cl, cr;
     register int best;
@@ -356,7 +356,7 @@ ftautology(pset *T, sm_matrix *table)
 static bool
 ftaut_special_cases(pset *T, sm_matrix *table)
                           /* will be disposed if answer is determined */
-                 
+
 {
     register pcube *T1, *Tsave, p, temp = cube.temp[0], ceil = cube.temp[1];
     int var, rownum;
