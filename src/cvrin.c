@@ -82,9 +82,9 @@ void read_cube(register FILE *fp, pPLA PLA)
 		if (cube.part_size[var] < 0) {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
-		(void) fscanf(fp, "%s", token);
+			(void) fscanf(fp, "%s", token);
 #pragma GCC diagnostic pop
-		if (equal(token, "-") || equal(token, "ANY")) {
+			if (equal(token, "-") || equal(token, "ANY")) {
 				if (kiss && var == cube.num_vars - 2) {
 					/* leave it empty */
 				} else {
@@ -271,14 +271,14 @@ void parse_pla(FILE *fp, pPLA PLA)
 #pragma GCC diagnostic ignored "-Wunused-result"
 				(void) fscanf(fp, "%d", &np);
 #pragma GCC diagnostic pop
-			/* .e and .end specify the end of the file */
+				/* .e and .end specify the end of the file */
 			} else if (equal(word, "e") || equal(word,"end")) {
 				return;
-			/* .kiss turns on the kiss-hack option */
+				/* .kiss turns on the kiss-hack option */
 			} else if (equal(word, "kiss")) {
 				kiss = TRUE;
 
-			/* .type specifies a logical type for the PLA */
+				/* .type specifies a logical type for the PLA */
 			} else if (equal(word, "type")) {
 				(void) get_word(fp, word);
 				for(i = 0; pla_types[i].key != 0; i++)
@@ -577,43 +577,43 @@ void PLA_summary(pPLA PLA)
 
     printf("# PLA is %s", PLA->filename);
     if (cube.num_binary_vars == cube.num_vars - 1)
-	printf(" with %d inputs and %d outputs\n",
-	    cube.num_binary_vars, cube.part_size[cube.num_vars - 1]);
+		printf(" with %d inputs and %d outputs\n",
+			cube.num_binary_vars, cube.part_size[cube.num_vars - 1]);
     else {
-	printf(" with %d variables (%d binary, mv sizes",
-	    cube.num_vars, cube.num_binary_vars);
-	for(var = cube.num_binary_vars; var < cube.num_vars; var++)
-	    printf(" %d", cube.part_size[var]);
-	printf(")\n");
+		printf(" with %d variables (%d binary, mv sizes",
+			cube.num_vars, cube.num_binary_vars);
+		for(var = cube.num_binary_vars; var < cube.num_vars; var++)
+			printf(" %d", cube.part_size[var]);
+		printf(")\n");
     }
     printf("# ON-set cost is  %s\n", print_cost(PLA->F));
     printf("# OFF-set cost is %s\n", print_cost(PLA->R));
     printf("# DC-set cost is  %s\n", print_cost(PLA->D));
     if (PLA->phase != NULL)
-	printf("# phase is %s\n", pc1(PLA->phase));
+		printf("# phase is %s\n", pc1(PLA->phase));
     if (PLA->pair != NULL) {
-	printf("# two-bit decoders:");
-	for(i = 0; i < PLA->pair->cnt; i++)
-	    printf(" (%d %d)", PLA->pair->var1[i], PLA->pair->var2[i]);
-	printf("\n");
+		printf("# two-bit decoders:");
+		for(i = 0; i < PLA->pair->cnt; i++)
+			printf(" (%d %d)", PLA->pair->var1[i], PLA->pair->var2[i]);
+		printf("\n");
     }
     if (PLA->symbolic != NIL(symbolic_t)) {
-	for(p1 = PLA->symbolic; p1 != NIL(symbolic_t); p1 = p1->next) {
-	    printf("# symbolic: ");
-	    for(p2=p1->symbolic_list; p2!=NIL(symbolic_list_t); p2=p2->next) {
-		printf(" %d", p2->variable);
-	    }
-	    printf("\n");
-	}
+		for(p1 = PLA->symbolic; p1 != NIL(symbolic_t); p1 = p1->next) {
+			printf("# symbolic: ");
+			for(p2=p1->symbolic_list; p2!=NIL(symbolic_list_t); p2=p2->next) {
+				printf(" %d", p2->variable);
+			}
+			printf("\n");
+		}
     }
     if (PLA->symbolic_output != NIL(symbolic_t)) {
-	for(p1 = PLA->symbolic_output; p1 != NIL(symbolic_t); p1 = p1->next) {
-	    printf("# output symbolic: ");
-	    for(p2=p1->symbolic_list; p2!=NIL(symbolic_list_t); p2=p2->next) {
-		printf(" %d", p2->pos);
-	    }
-	    printf("\n");
-	}
+		for(p1 = PLA->symbolic_output; p1 != NIL(symbolic_t); p1 = p1->next) {
+			printf("# output symbolic: ");
+			for(p2=p1->symbolic_list; p2!=NIL(symbolic_list_t); p2=p2->next) {
+				printf(" %d", p2->pos);
+			}
+			printf("\n");
+		}
     }
     (void) fflush(stdout);
 }
@@ -640,7 +640,7 @@ void PLA_labels(pPLA PLA)
 
     PLA->label = ALLOC(char *, cube.size);
     for(i = 0; i < cube.size; i++)
-	PLA->label[i] = (char *) NULL;
+		PLA->label[i] = (char *) NULL;
 }
 
 void free_PLA(pPLA PLA)

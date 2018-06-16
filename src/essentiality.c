@@ -4,7 +4,7 @@
  * pcover ess_test_and_reduction():
  *	determines essentiality of the given signature cube and returns
  * 	cover of the signature cube (Hammered signature cube) if found
- *	inessential.	
+ *	inessential.
  * pcover aux_ess_test_and_reduction():
  *	core compuation routine which determines the essentiality of
  *	the signature cube and performs reduction of inessential signature
@@ -34,11 +34,11 @@ static int reduced_c_free_count; /* active size of the above list */
 static VAR *unate_list; /* List of unate variables in the reduced_c_free_list */
 static int unate_count; /* active size of the above list */
 
-static VAR *binate_list; /* List of binate variables in the 
+static VAR *binate_list; /* List of binate variables in the
 			 reduced_c_free_list */
 static int binate_count; /* active size of the above list */
 
-static int *variable_order; /* permutation of reduced c_free_count determining 
+static int *variable_order; /* permutation of reduced c_free_count determining
 			    static ordering of variables */
 static int variable_count; /* active size of the above list */
 static int variable_head; /* current position in  the list above */
@@ -48,13 +48,13 @@ static int variable_head; /* current position in  the list above */
 /* Clearly not the most optimized usage of memory. Not worth saving
    few pennies when the total memory budget is quite large */
 
-pcover COVER; /* A global bag to collect the signature cubes in the cover 
+pcover COVER; /* A global bag to collect the signature cubes in the cover
 		 of inessential signature cube */
 
 /* etr_order:
  * What does it do:
  *	Performs performs ordering of variables before calling
- *	essentiality test and reduction routine 
+ *	essentiality test and reduction routine
  * Inputs:
  *	R: Cover of the Off-set.
  *	c: cube to be reduced
@@ -94,7 +94,7 @@ etr_order(pset_family F, pset_family E, pset_family R, pset c, pset d)
 		exit(1);
 	}
 
-	/* 1.Identify free variables of cube c */	
+	/* 1.Identify free variables of cube c */
 	c_free_count = 0;
 	for(v = 0; v < num_binary_vars; v++){
 		e0 = v<<1;
@@ -127,8 +127,8 @@ etr_order(pset_family F, pset_family E, pset_family R, pset c, pset d)
 		}
 	}
 
-	/* 3.Identify unate and binate variables and sort them in the 
-	     decreasing free_count */
+	/* 3.Identify unate and binate variables and sort them in the
+	   decreasing free_count */
 	unate_count = 0;
 	binate_count = 0;
 	for(i = 0; i < reduced_c_free_count; i++){
@@ -174,9 +174,9 @@ etr_order(pset_family F, pset_family E, pset_family R, pset c, pset d)
 	for(i = 0; i < unate_count; i++){
 		variable_order[variable_count++] = unate_list[i].variable;
 	}
-	
+
 	/* 4.Recursively go down the tree defined by r_free_list,
-	     invoking "etr" at the leaves */
+	   invoking "etr" at the leaves */
 
 	COVER = new_cover(10);
 	setup_bw(R,c);
@@ -209,7 +209,7 @@ ascending(VAR *p1, VAR *p2)
 	}
 	else{
 		return 0;
-	}	
+	}
 }
 
 /*
@@ -266,7 +266,7 @@ aux_etr_order(pset_family F, pset_family E, pset_family R, pset c, pset d)
 		v_index = variable_order[variable_head];
 	}
 	free_cubelist(local_dc);
-		
+
 	e0 = (v_index<<1);
 	e1 = e0 + 1;
 

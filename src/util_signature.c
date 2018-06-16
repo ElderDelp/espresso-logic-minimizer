@@ -1,6 +1,6 @@
 /* Module:util_signature.c
  * Purpose:
- *	contains miscellaneous utility routines 
+ *	contains miscellaneous utility routines
  * Routines:
  * void set_time_limit(seconds)
  *	sets the cpu time limit
@@ -55,7 +55,7 @@ sf_equal(pset_family F1, pset_family F2)
 	if(F1->count != F2->count){
 		return(FALSE);
 	}
-	
+
 	list1 = sf_sort(F1, (qsort_compare_func) descend);
 	list2 = sf_sort(F2, (qsort_compare_func) descend);
 
@@ -133,12 +133,12 @@ s_runtime(long int total)
     long temp;
 
     for(i = 0; i < TIME_COUNT; i++) {
-	if (total_calls[i] != 0) {
-	    temp = 100 * total_time[i];
-	    printf("# %s\t%2d call(s) for %s ( %2ld.%01ld%% )\n",
-		total_name[i], total_calls[i], print_time(total_time[i]),
-		    temp/total, (10 * (temp%total)) / total);
-	}
+		if (total_calls[i] != 0) {
+			temp = 100 * total_time[i];
+			printf("# %s\t%2d call(s) for %s ( %2ld.%01ld%% )\n",
+				total_name[i], total_calls[i], print_time(total_time[i]),
+				temp/total, (10 * (temp%total)) / total);
+		}
     }
 }
 

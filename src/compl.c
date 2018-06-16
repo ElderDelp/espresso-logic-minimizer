@@ -76,9 +76,9 @@ pcover complement(pset *T)
 
 static bool compl_special_cases(pset *T, pset_family *Tbar)
 {
-  /* will be disposed if answer is determined
-   * returned only if answer determined
-   */
+	/* will be disposed if answer is determined
+	 * returned only if answer determined
+	 */
     register pcube *T1, p, ceil, cof=T[0];
     pcover A, ceil_compl;
 
@@ -170,21 +170,21 @@ static pcover compl_merge(pset *T1, pset_family L, pset_family R, register pset 
     pcube *L1, *R1;
 
     if (debug & COMPL) {
-	printf("compl_merge: left %d, right %d\n", L->count, R->count);
-	printf("%s (cl)\n%s (cr)\nLeft is\n", pc1(cl), pc2(cr));
-	cprint(L);
-	printf("Right is\n");
-	cprint(R);
+		printf("compl_merge: left %d, right %d\n", L->count, R->count);
+		printf("%s (cl)\n%s (cr)\nLeft is\n", pc1(cl), pc2(cr));
+		cprint(L);
+		printf("Right is\n");
+		cprint(R);
     }
 
     /* Intersect each cube with the cofactored cube */
     foreach_set(L, last, p) {
-	INLINEset_and(p, p, cl);
-	SET(p, ACTIVE);
+		INLINEset_and(p, p, cl);
+		SET(p, ACTIVE);
     }
     foreach_set(R, last, p) {
-	INLINEset_and(p, p, cr);
-	SET(p, ACTIVE);
+		INLINEset_and(p, p, cr);
+		SET(p, ACTIVE);
     }
 
     /* Sort the arrays for a distance-1 merge */
@@ -197,24 +197,24 @@ static pcover compl_merge(pset *T1, pset_family L, pset_family R, register pset 
 
     /* Perform lifting */
     switch(lifting) {
-	case USE_COMPL_LIFT_ONSET:
-	    T = cubeunlist(T1);
-	    compl_lift_onset(L1, T, cr, var);
-	    compl_lift_onset(R1, T, cl, var);
-	    free_cover(T);
-	    break;
-	case USE_COMPL_LIFT_ONSET_COMPLEX:
-	    T = cubeunlist(T1);
-	    compl_lift_onset_complex(L1, T, var);
-	    compl_lift_onset_complex(R1, T, var);
-	    free_cover(T);
-	    break;
-	case USE_COMPL_LIFT:
-	    compl_lift(L1, R1, cr, var);
-	    compl_lift(R1, L1, cl, var);
-	    break;
-	case NO_LIFTING:
-	    break;
+		case USE_COMPL_LIFT_ONSET:
+			T = cubeunlist(T1);
+			compl_lift_onset(L1, T, cr, var);
+			compl_lift_onset(R1, T, cl, var);
+			free_cover(T);
+			break;
+		case USE_COMPL_LIFT_ONSET_COMPLEX:
+			T = cubeunlist(T1);
+			compl_lift_onset_complex(L1, T, var);
+			compl_lift_onset_complex(R1, T, var);
+			free_cover(T);
+			break;
+		case USE_COMPL_LIFT:
+			compl_lift(L1, R1, cr, var);
+			compl_lift(R1, L1, cl, var);
+			break;
+		case NO_LIFTING:
+			break;
     }
     FREE(L1);
     FREE(R1);
@@ -223,20 +223,20 @@ static pcover compl_merge(pset *T1, pset_family L, pset_family R, register pset 
     Tbar = new_cover(L->count + R->count);
     pt = Tbar->data;
     foreach_set(L, last, p) {
-	INLINEset_copy(pt, p);
-	Tbar->count++;
-	pt += Tbar->wsize;
+		INLINEset_copy(pt, p);
+		Tbar->count++;
+		pt += Tbar->wsize;
     }
     foreach_active_set(R, last, p) {
-	INLINEset_copy(pt, p);
-	Tbar->count++;
-	pt += Tbar->wsize;
+		INLINEset_copy(pt, p);
+		Tbar->count++;
+		pt += Tbar->wsize;
     }
 
     if (debug & COMPL) {
-	printf("Result %d\n", Tbar->count);
-	if (verbose_debug)
-	    cprint(Tbar);
+		printf("Result %d\n", Tbar->count);
+		if (verbose_debug)
+			cprint(Tbar);
     }
 
     free_cover(L);
@@ -259,21 +259,21 @@ static void compl_lift(pset *A1, pset *B1, pset bcube, int var)
 
     /* for each cube in the first array ... */
     for(; (a = *A1++) != NULL; ) {
-	if (TESTP(a, ACTIVE)) {
+		if (TESTP(a, ACTIVE)) {
 
-	    /* create a lift of this cube in the merging coord */
-	    (void) set_merge(lift, bcube, a, mask);
+			/* create a lift of this cube in the merging coord */
+			(void) set_merge(lift, bcube, a, mask);
 
-	    /* for each cube in the second array */
-	    for(B2 = B1; (b = *B2++) != NULL; ) {
-		INLINEsetp_implies(lift, b, /* when_false => */ continue);
-		/* when_true => fall through to next statement */
+			/* for each cube in the second array */
+			for(B2 = B1; (b = *B2++) != NULL; ) {
+				INLINEsetp_implies(lift, b, /* when_false => */ continue);
+				/* when_true => fall through to next statement */
 
-		/* cube of A1 was contained by some cube of B1, so raise */
-		INLINEset_or(a, a, liftor);
-		break;
-	    }
-	}
+				/* cube of A1 was contained by some cube of B1, so raise */
+				INLINEset_or(a, a, liftor);
+				break;
+			}
+		}
     }
 }
 
@@ -291,22 +291,22 @@ static void compl_lift_onset(pset *A1, pset_family T, pset bcube, int var)
 
     /* for each active cube from one branch of the complement */
     for(; (a = *A1++) != NULL; ) {
-	if (TESTP(a, ACTIVE)) {
+		if (TESTP(a, ACTIVE)) {
 
-	    /* create a lift of this cube in the merging coord */
-	    INLINEset_and(lift, bcube, mask);	/* isolate parts to raise */
-	    INLINEset_or(lift, a, lift);	/* raise these parts in a */
+			/* create a lift of this cube in the merging coord */
+			INLINEset_and(lift, bcube, mask);	/* isolate parts to raise */
+			INLINEset_or(lift, a, lift);	/* raise these parts in a */
 
-	    /* for each cube in the ON-set, check for intersection */
-	    foreach_set(T, last, p) {
-		if (cdist0(p, lift)) {
-		    goto nolift;
+			/* for each cube in the ON-set, check for intersection */
+			foreach_set(T, last, p) {
+				if (cdist0(p, lift)) {
+					goto nolift;
+				}
+			}
+			INLINEset_copy(a, lift);		/* save the raising */
+			SET(a, ACTIVE);
+		  nolift : ;
 		}
-	    }
-	    INLINEset_copy(a, lift);		/* save the raising */
-	    SET(a, ACTIVE);
-nolift : ;
-	}
     }
 }
 
@@ -328,24 +328,24 @@ static void compl_lift_onset_complex(pset *A1, pset_family T, int var)
     xlower = new_cube();
     for(; (a = *A1++) != NULL; ) {
 
-	if (TESTP(a, ACTIVE)) {
+		if (TESTP(a, ACTIVE)) {
 
-	    /* Find which parts of the splitting variable are forced low */
-	    INLINEset_clear(xlower, cube.size);
-	    foreach_set(T, last, p) {
-		if ((dist = cdist01(p, a)) < 2) {
-		    if (dist == 0) {
-			fatal("compl: ON-set and OFF-set are not orthogonal");
-		    } else {
-			(void) force_lower(xlower, p, a);
-		    }
+			/* Find which parts of the splitting variable are forced low */
+			INLINEset_clear(xlower, cube.size);
+			foreach_set(T, last, p) {
+				if ((dist = cdist01(p, a)) < 2) {
+					if (dist == 0) {
+						fatal("compl: ON-set and OFF-set are not orthogonal");
+					} else {
+						(void) force_lower(xlower, p, a);
+					}
+				}
+			}
+
+			(void) set_diff(xlower, cube.var_mask[var], xlower);
+			(void) set_or(a, a, xlower);
+			free_cube(xlower);
 		}
-	    }
-
-	    (void) set_diff(xlower, cube.var_mask[var], xlower);
-	    (void) set_or(a, a, xlower);
-	    free_cube(xlower);
-	}
     }
 }
 
@@ -360,16 +360,16 @@ static void compl_d1merge(register pset *L1, register pset *R1)
 
     /* Find equal cubes between the two cofactors */
     for(pl = *L1, pr = *R1; (pl != NULL) && (pr != NULL); )
-	switch (d1_order(L1, R1)) {
-	    case 1:
-		pr = *(++R1); break;            /* advance right pointer */
-	    case -1:
-		pl = *(++L1); break;            /* advance left pointer */
-	    case 0:
-		RESET(pr, ACTIVE);
-		INLINEset_or(pl, pl, pr);
-		pr = *(++R1);
-	}
+		switch (d1_order(L1, R1)) {
+			case 1:
+				pr = *(++R1); break;            /* advance right pointer */
+			case -1:
+				pl = *(++L1); break;            /* advance left pointer */
+			case 0:
+				RESET(pr, ACTIVE);
+				INLINEset_or(pl, pl, pr);
+				pr = *(++R1);
+		}
 }
 
 
@@ -388,12 +388,12 @@ static pcover compl_cube(register pset p)
     INLINEset_diff(diff, full, p);
 
     for(var = 0; var < cube.num_vars; var++) {
-	mask = cube.var_mask[var];
-	/* If the bit-wise complement is not empty in var ... */
-	if (! setp_disjoint(diff, mask)) {
-	    pdest = GETSET(R, R->count++);
-	    INLINEset_merge(pdest, diff, full, mask);
-	}
+		mask = cube.var_mask[var];
+		/* If the bit-wise complement is not empty in var ... */
+		if (! setp_disjoint(diff, mask)) {
+			pdest = GETSET(R, R->count++);
+			INLINEset_merge(pdest, diff, full, mask);
+		}
     }
     return R;
 }
@@ -411,40 +411,40 @@ void simp_comp(pset *T, pset_family *Tnew, pset_family *Tbar)
     static int simplify_level = 0;
 
     if (debug & COMPL)
-	debug_print(T, "SIMPCOMP", simplify_level++);
+		debug_print(T, "SIMPCOMP", simplify_level++);
 
     if (simp_comp_special_cases(T, Tnew, Tbar) == MAYBE) {
 
-	/* Allocate space for the partition cubes */
-	cl = new_cube();
-	cr = new_cube();
-	best = binate_split_select(T, cl, cr, COMPL);
+		/* Allocate space for the partition cubes */
+		cl = new_cube();
+		cr = new_cube();
+		best = binate_split_select(T, cl, cr, COMPL);
 
-	/* Complement the left and right halves */
-	simp_comp(scofactor(T, cl, best), &Tl, &Tlbar);
-	simp_comp(scofactor(T, cr, best), &Tr, &Trbar);
+		/* Complement the left and right halves */
+		simp_comp(scofactor(T, cl, best), &Tl, &Tlbar);
+		simp_comp(scofactor(T, cr, best), &Tr, &Trbar);
 
-	lifting = USE_COMPL_LIFT;
-	*Tnew = compl_merge(T, Tl, Tr, cl, cr, best, lifting);
+		lifting = USE_COMPL_LIFT;
+		*Tnew = compl_merge(T, Tl, Tr, cl, cr, best, lifting);
 
-	lifting = USE_COMPL_LIFT;
-	*Tbar = compl_merge(T, Tlbar, Trbar, cl, cr, best, lifting);
+		lifting = USE_COMPL_LIFT;
+		*Tbar = compl_merge(T, Tlbar, Trbar, cl, cr, best, lifting);
 
-	/* All of this work for nothing ? Let's hope not ... */
-	if ((*Tnew)->count > CUBELISTSIZE(T)) {
-	    sf_free(*Tnew);
-	    *Tnew = cubeunlist(T);
-	}
+		/* All of this work for nothing ? Let's hope not ... */
+		if ((*Tnew)->count > CUBELISTSIZE(T)) {
+			sf_free(*Tnew);
+			*Tnew = cubeunlist(T);
+		}
 
-	free_cube(cl);
-	free_cube(cr);
-	free_cubelist(T);
+		free_cube(cl);
+		free_cube(cr);
+		free_cubelist(T);
     }
 
     if (debug & COMPL) {
-	debug1_print(*Tnew, "exit SIMPCOMP (new)", simplify_level);
-	debug1_print(*Tbar, "exit SIMPCOMP (compl)", simplify_level);
-	simplify_level--;
+		debug1_print(*Tnew, "exit SIMPCOMP (new)", simplify_level);
+		debug1_print(*Tbar, "exit SIMPCOMP (compl)", simplify_level);
+		simplify_level--;
     }
 }
 
@@ -459,53 +459,53 @@ static bool simp_comp_special_cases(pset *T, pset_family *Tnew, pset_family *Tba
 
     /* Check for no cubes in the cover (function is empty) */
     if (T[2] == NULL) {
-	*Tnew = new_cover(1);
-	*Tbar = sf_addset(new_cover(1), cube.fullset);
-	free_cubelist(T);
-	return TRUE;
+		*Tnew = new_cover(1);
+		*Tbar = sf_addset(new_cover(1), cube.fullset);
+		free_cubelist(T);
+		return TRUE;
     }
 
     /* Check for only a single cube in the cover */
     if (T[3] == NULL) {
-	(void) set_or(cof, cof, T[2]);
-	*Tnew = sf_addset(new_cover(1), cof);
-	*Tbar = compl_cube(cof);
-	free_cubelist(T);
-	return TRUE;
+		(void) set_or(cof, cof, T[2]);
+		*Tnew = sf_addset(new_cover(1), cof);
+		*Tbar = compl_cube(cof);
+		free_cubelist(T);
+		return TRUE;
     }
 
     /* Check for a row of all 1's (function is a tautology) */
     for(T1 = T+2; (p = *T1++) != NULL; ) {
-	if (full_row(p, cof)) {
-	    *Tnew = sf_addset(new_cover(1), cube.fullset);
-	    *Tbar = new_cover(1);
-	    free_cubelist(T);
-	    return TRUE;
-	}
+		if (full_row(p, cof)) {
+			*Tnew = sf_addset(new_cover(1), cube.fullset);
+			*Tbar = new_cover(1);
+			free_cubelist(T);
+			return TRUE;
+		}
     }
 
     /* Check for a column of all 0's which can be factored out */
     ceil = set_save(cof);
     for(T1 = T+2; (p = *T1++) != NULL; ) {
-	INLINEset_or(ceil, ceil, p);
+		INLINEset_or(ceil, ceil, p);
     }
     if (! setp_equal(ceil, cube.fullset)) {
-	p = new_cube();
-	(void) set_diff(p, cube.fullset, ceil);
-	(void) set_or(cof, cof, p);
-	set_free(p);
-	simp_comp(T, Tnew, Tbar);
+		p = new_cube();
+		(void) set_diff(p, cube.fullset, ceil);
+		(void) set_or(cof, cof, p);
+		set_free(p);
+		simp_comp(T, Tnew, Tbar);
 
-	/* Adjust the ON-set */
-	A = *Tnew;
-	foreach_set(A, last, p) {
-	    INLINEset_and(p, p, ceil);
-	}
+		/* Adjust the ON-set */
+		A = *Tnew;
+		foreach_set(A, last, p) {
+			INLINEset_and(p, p, ceil);
+		}
 
-	/* Compute the new complement */
-	*Tbar = sf_append(*Tbar, compl_cube(ceil));
-	set_free(ceil);
-	return TRUE;
+		/* Compute the new complement */
+		*Tbar = sf_append(*Tbar, compl_cube(ceil));
+		set_free(ceil);
+		return TRUE;
     }
     set_free(ceil);
 
@@ -514,28 +514,28 @@ static bool simp_comp_special_cases(pset *T, pset_family *Tnew, pset_family *Tba
 
     /* If single active variable not factored out above, then tautology ! */
     if (cdata.vars_active == 1) {
-	*Tnew = sf_addset(new_cover(1), cube.fullset);
-	*Tbar = new_cover(1);
-	free_cubelist(T);
-	return TRUE;
+		*Tnew = sf_addset(new_cover(1), cube.fullset);
+		*Tbar = new_cover(1);
+		free_cubelist(T);
+		return TRUE;
 
-    /* Check for unate cover */
+		/* Check for unate cover */
     } else if (cdata.vars_unate == cdata.vars_active) {
-	/* Make the cover minimum by single-cube containment */
-	A = cubeunlist(T);
-	*Tnew = sf_contain(A);
+		/* Make the cover minimum by single-cube containment */
+		A = cubeunlist(T);
+		*Tnew = sf_contain(A);
 
-	/* Now form a minimum representation of the complement */
-	A = map_cover_to_unate(T);
-	A = unate_compl(A);
-	*Tbar = map_unate_to_cover(A);
-	sf_free(A);
-	free_cubelist(T);
-	return TRUE;
+		/* Now form a minimum representation of the complement */
+		A = map_cover_to_unate(T);
+		A = unate_compl(A);
+		*Tbar = map_unate_to_cover(A);
+		sf_free(A);
+		free_cubelist(T);
+		return TRUE;
 
-    /* Not much we can do about it */
+		/* Not much we can do about it */
     } else {
-	return MAYBE;
+		return MAYBE;
     }
 }
 
@@ -550,37 +550,37 @@ pcover simplify(pset *T)
     static int simplify_level = 0;
 
     if (debug & COMPL) {
-	debug_print(T, "SIMPLIFY", simplify_level++);
+		debug_print(T, "SIMPLIFY", simplify_level++);
     }
 
     if (simplify_special_cases(T, &Tbar) == MAYBE) {
 
-	/* Allocate space for the partition cubes */
-	cl = new_cube();
-	cr = new_cube();
+		/* Allocate space for the partition cubes */
+		cl = new_cube();
+		cr = new_cube();
 
-	best = binate_split_select(T, cl, cr, COMPL);
+		best = binate_split_select(T, cl, cr, COMPL);
 
-	/* Complement the left and right halves */
-	Tl = simplify(scofactor(T, cl, best));
-	Tr = simplify(scofactor(T, cr, best));
+		/* Complement the left and right halves */
+		Tl = simplify(scofactor(T, cl, best));
+		Tr = simplify(scofactor(T, cr, best));
 
-	lifting = USE_COMPL_LIFT;
-	Tbar = compl_merge(T, Tl, Tr, cl, cr, best, lifting);
+		lifting = USE_COMPL_LIFT;
+		Tbar = compl_merge(T, Tl, Tr, cl, cr, best, lifting);
 
-	/* All of this work for nothing ? Let's hope not ... */
-	if (Tbar->count > CUBELISTSIZE(T)) {
-	    sf_free(Tbar);
-	    Tbar = cubeunlist(T);
-	}
+		/* All of this work for nothing ? Let's hope not ... */
+		if (Tbar->count > CUBELISTSIZE(T)) {
+			sf_free(Tbar);
+			Tbar = cubeunlist(T);
+		}
 
-	free_cube(cl);
-	free_cube(cr);
-	free_cubelist(T);
+		free_cube(cl);
+		free_cube(cr);
+		free_cubelist(T);
     }
 
     if (debug & COMPL) {
-	debug1_print(Tbar, "exit SIMPLIFY", --simplify_level);
+		debug1_print(Tbar, "exit SIMPLIFY", --simplify_level);
     }
     return Tbar;
 }
@@ -595,45 +595,45 @@ static bool simplify_special_cases(pset *T, pset_family *Tnew)
 
     /* Check for no cubes in the cover */
     if (T[2] == NULL) {
-	*Tnew = new_cover(0);
-	free_cubelist(T);
-	return TRUE;
+		*Tnew = new_cover(0);
+		free_cubelist(T);
+		return TRUE;
     }
 
     /* Check for only a single cube in the cover */
     if (T[3] == NULL) {
-	*Tnew = sf_addset(new_cover(1), set_or(cof, cof, T[2]));
-	free_cubelist(T);
-	return TRUE;
+		*Tnew = sf_addset(new_cover(1), set_or(cof, cof, T[2]));
+		free_cubelist(T);
+		return TRUE;
     }
 
     /* Check for a row of all 1's (implies function is a tautology) */
     for(T1 = T+2; (p = *T1++) != NULL; ) {
-	if (full_row(p, cof)) {
-	    *Tnew = sf_addset(new_cover(1), cube.fullset);
-	    free_cubelist(T);
-	    return TRUE;
-	}
+		if (full_row(p, cof)) {
+			*Tnew = sf_addset(new_cover(1), cube.fullset);
+			free_cubelist(T);
+			return TRUE;
+		}
     }
 
     /* Check for a column of all 0's which can be factored out */
     ceil = set_save(cof);
     for(T1 = T+2; (p = *T1++) != NULL; ) {
-	INLINEset_or(ceil, ceil, p);
+		INLINEset_or(ceil, ceil, p);
     }
     if (! setp_equal(ceil, cube.fullset)) {
-	p = new_cube();
-	(void) set_diff(p, cube.fullset, ceil);
-	(void) set_or(cof, cof, p);
-	free_cube(p);
+		p = new_cube();
+		(void) set_diff(p, cube.fullset, ceil);
+		(void) set_or(cof, cof, p);
+		free_cube(p);
 
-	A = simplify(T);
-	foreach_set(A, last, p) {
-	    INLINEset_and(p, p, ceil);
-	}
-	*Tnew = A;
-	set_free(ceil);
-	return TRUE;
+		A = simplify(T);
+		foreach_set(A, last, p) {
+			INLINEset_and(p, p, ceil);
+		}
+		*Tnew = A;
+		set_free(ceil);
+		return TRUE;
     }
     set_free(ceil);
 
@@ -642,19 +642,19 @@ static bool simplify_special_cases(pset *T, pset_family *Tnew)
 
     /* If single active variable not factored out above, then tautology ! */
     if (cdata.vars_active == 1) {
-	*Tnew = sf_addset(new_cover(1), cube.fullset);
-	free_cubelist(T);
-	return TRUE;
+		*Tnew = sf_addset(new_cover(1), cube.fullset);
+		free_cubelist(T);
+		return TRUE;
 
-    /* Check for unate cover */
+		/* Check for unate cover */
     } else if (cdata.vars_unate == cdata.vars_active) {
-	A = cubeunlist(T);
-	*Tnew = sf_contain(A);
-	free_cubelist(T);
-	return TRUE;
+		A = cubeunlist(T);
+		*Tnew = sf_contain(A);
+		free_cubelist(T);
+		return TRUE;
 
-    /* Not much we can do about it */
+		/* Not much we can do about it */
     } else {
-	return MAYBE;
+		return MAYBE;
     }
 }

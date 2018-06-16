@@ -82,7 +82,7 @@ static void delete(int element)
 		else{
 			white_head = white_tail = -1;
 		}
-	}	
+	}
 }
 
 static void insert(int element)
@@ -172,7 +172,7 @@ void setup_bw(pset_family R, pset c)
 	int size = R->count;
 	register int i;
 	pcube b,r;
-    	register int w, last;
+	register int w, last;
 	register unsigned int x;
 
 	/* Allocate memory */
@@ -195,11 +195,11 @@ void setup_bw(pset_family R, pset c)
 			b[last] = r[last] & (x | x << 1);
 			/* Check the full words of binary variables */
 			for(w = 1; w < last; w++) {
-	    			x = r[w] & c[w];
-	    			x = ~(x | x >> 1) & DISJOINT;
+				x = r[w] & c[w];
+				x = ~(x | x >> 1) & DISJOINT;
 				b[w] = r[w] & (x | x << 1);
 			}
-    		}
+		}
 		PUTLOOP(b,LOOP(r));
 		INLINEset_and(b,b,cube.binary_mask);
 		INLINEset_and(out_part_r,cube.mv_mask,r);
@@ -229,7 +229,7 @@ int black_white(void)
 				containment = TRUE;
 				break;
 			}
-		}	
+		}
 		if(containment == FALSE){
 			return FALSE;
 		}
@@ -287,7 +287,7 @@ void variable_list_init(int reduced_c_free_count, int *reduced_c_free_list)
 	variable_tail = reduced_c_free_list[variable_count - 1];
 	variable_forward_chain[variable_tail] = -1;
 	variable_backward_chain[variable_head] = -1;
-	
+
 	next_v = variable_head;
 	for(i = 1; i < variable_count; i++){
 		v = next_v; next_v = reduced_c_free_list[i];
@@ -320,7 +320,7 @@ void variable_list_delete(int element)
 		else{
 			variable_head = variable_tail = -1;
 		}
-	}	
+	}
 }
 
 void variable_list_insert(int element)
@@ -358,7 +358,7 @@ void get_next_variable(int *pv, int *pphase, pset_family R)
 		e0_black_count = e1_black_count = 0;
 		for(w_index = white_head; w_index != -1; w_index = forward[w_index]){
 			r = GETSET(R,w_index);
-			if(is_in_set(r,e0)){	
+			if(is_in_set(r,e0)){
 				if(is_in_set(r,e1)){
 					continue;
 				}
@@ -372,19 +372,19 @@ void get_next_variable(int *pv, int *pphase, pset_family R)
 		}
 		if(e0_black_count > e1_black_count){
 			if(e0_black_count > max_black_count){
-					max_black_count = e0_black_count;
-					max_variable = v;
-					max_phase = 0;
+				max_black_count = e0_black_count;
+				max_variable = v;
+				max_phase = 0;
 			}
 		}
 		else{
 			if(e1_black_count > max_black_count){
-					max_black_count = e1_black_count;
-					max_variable = v;
-					max_phase = 1;
+				max_black_count = e1_black_count;
+				max_variable = v;
+				max_phase = 1;
 			}
 		}
-	}	
+	}
 	*pv = max_variable;
 	*pphase = max_phase;
 }

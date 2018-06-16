@@ -3,9 +3,9 @@
  * Purpose: The main signature algorithm
  * Routines;
  * pcover signature():
- *	Entry point for the signature cubes algorithm.	
+ *	Entry point for the signature cubes algorithm.
  * pcover generate_primes():
- *	Generates the set of primes corresponding to 
+ *	Generates the set of primes corresponding to
  *	the Essential Signature Cubes
  */
 
@@ -50,23 +50,23 @@ signature(pset_family F1, pset_family D1, pset_family R1)
 	S_EXECUTE(ESSENTIAL = essential(&F,&D), ESSEN_TIME);
 
 	S_EXECUTE(ESC = find_canonical_cover(F,D,R), FCC_TIME);
-	/**************************************************
+	/***************************************************************************
 	printf("ESCubes %d\n", ESC->count + ESSENTIAL->count);
 	fflush(stdout);
-	**************************************************/
+	*****************************************************************************/
 
 	S_EXECUTE(ESSet = generate_primes(ESC,R), PRIMES_TIME);
-	/**************************************************
+	/***************************************************************************
 	printf("ESSet %d\n",ESSet->count + ESSENTIAL->count);
 	fflush(stdout);
-	**************************************************/
+	*****************************************************************************/
 
 	S_EXECUTE(F = signature_minimize_exact(ESC,ESSet), MINCOV_TIME);
 	sf_append(F,ESSENTIAL);
-	/**************************************************
+	/***************************************************************************
 	printf("Exact_Minimum %d\n",F->count);
 	print_cover(F,"Exact Minimum");
-	**************************************************/
+	*****************************************************************************/
 
 	if (! skip_make_sparse && R != 0) {
 		F = make_sparse(F, D1, R);
@@ -87,7 +87,7 @@ generate_primes(pset_family F, pset_family R)
 	pcover BB,PRIMES;
 	pcube odd,even,out_part_r;
 	register int i;
-    	register int w, last;
+	register int w, last;
 	register unsigned int x;
 	int count;
 
@@ -110,11 +110,11 @@ generate_primes(pset_family F, pset_family R)
 				b[last] = r[last] & (x | x << 1);
 				/* Check the full words of binary variables */
 				for(w = 1; w < last; w++) {
-		    			x = r[w] & c[w];
-		    			x = ~(x | x >> 1) & DISJOINT;
+					x = r[w] & c[w];
+					x = ~(x | x >> 1) & DISJOINT;
 					b[w] = r[w] & (x | x << 1);
 				}
-	    		}
+			}
 			PUTLOOP(b,LOOP(r));
 			INLINEset_and(b,b,cube.binary_mask);
 			INLINEset_and(out_part_r,cube.mv_mask,r);
@@ -144,7 +144,7 @@ generate_primes(pset_family F, pset_family R)
 void
 cleanup(void)
 {
-	s_runtime(ptime() - start_time);	
+	s_runtime(ptime() - start_time);
 	printf("CPU Limit Exceeded\n");
 	exit(1);
 }

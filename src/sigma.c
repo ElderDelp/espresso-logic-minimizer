@@ -27,7 +27,7 @@ get_sigma(pset_family R, register pset c)
 	pcube out_part_r,s;
 	register pcube r,b;
 	register int i;
-    	register int w, last;
+	register int w, last;
 	register unsigned int x;
 
 	out_part_r = new_cube();
@@ -45,11 +45,11 @@ get_sigma(pset_family R, register pset c)
 			b[last] = r[last] & (x | x << 1);
 			/* Check the full words of binary variables */
 			for(w = 1; w < last; w++) {
-	    			x = r[w] & c[w];
-	    			x = ~(x | x >> 1) & DISJOINT;
+				x = r[w] & c[w];
+				x = ~(x | x >> 1) & DISJOINT;
 				b[w] = r[w] & (x | x << 1);
 			}
-    		}
+		}
 		PUTLOOP(b,LOOP(r));
 		INLINEset_and(b,b,cube.binary_mask);
 		INLINEset_and(out_part_r,cube.mv_mask,r);
